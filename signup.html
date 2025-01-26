@@ -90,6 +90,9 @@
             <div class="text-center">
                 <p>Already have an account? <a href="index.html#login">Log In</a></p>
             </div>
+            <div id="signup-success" class="alert alert-success mt-3" style="display: none;">
+                Signup successful! You can now <a href="index.html#login">log in</a>.
+            </div>
         </form>
     </div>
 
@@ -105,6 +108,7 @@
                     // Signed up
                     var user = userCredential.user;
                     console.log("User signed up:", user);
+                    document.getElementById('signup-success').style.display = 'block';
                 })
                 .catch((error) => {
                     var errorCode = error.code;
