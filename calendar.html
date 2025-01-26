@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar - AGNES Nigeria Parliament</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <style>
+        * {box-sizing: border-box;}
+        ul {list-style-type: none;}
+        body {font-family: Verdana, sans-serif;}
+
+        .month {
+            padding: 70px 25px;
+            width: 100%;
+            background: #1abc9c;
+            text-align: center;
+        }
+
+        .month ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        .month ul li {
+            color: white;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .month .prev {
+            float: left;
+            padding-top: 10px;
+        }
+
+        .month .next {
+            float: right;
+            padding-top: 10px;
+        }
+
+        .weekdays {
+            margin: 0;
+            padding: 10px 0;
+            background-color: #ddd;
+        }
+
+        .weekdays li {
+            display: inline-block;
+            width: 13.6%;
+            color: #666;
+            text-align: center;
+        }
+
+        .days {
+            padding: 10px 0;
+            background: #eee;
+            margin: 0;
+        }
+
+        .days li {
+            list-style-type: none;
+            display: inline-block;
+            width: 13.6%;
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .days li.active {
+            padding: 5px;
+            background: #1abc9c;
+            color: white !important;
+        }
+
+        /* Add media queries for smaller screens */
+        @media screen and (max-width:720px) {
+            .weekdays li, .days li {width: 13.1%;}
+        }
+
+        @media screen and (max-width: 420px) {
+            .weekdays li, .days li {width: 12.5%;}
+            .days li.active {padding: 2px;}
+        }
+
+        @media screen and (max-width: 290px) {
+            .weekdays li, .days li {width: 12.2%;}
+        }
+    </style>
+</head>
+<body>
+
+<h1>Calendar</h1>
+
+<div class="month">      
+    <ul>
+        <li class="prev">&#10094;</li>
+        <li class="next">&#10095;</li>
+        <li>
+            <span id="month-year"></span><br>
+            <span style="font-size:18px" id="today-activity">No activities Today</span>
+        </li>
+    </ul>
+</div>
+
+<ul class="weekdays">
+    <li>Mo</li>
+    <li>Tu</li>
+    <li>We</li>
+    <li>Th</li>
+    <li>Fr</li>
+    <li>Sa</li>
+    <li>Su</li>
+</ul>
+
+<ul class="days" id="days">
+    <!-- Days will be dynamically inserted here -->
+</ul>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyAhmwL-einZeeQzistwL1UfzFIvRvvuAI0",
+        authDomain: "m-and-a-tool.firebaseapp.com",
+        projectId: "m-and-a-tool",
+        storageBucket: "m-and-a-tool.appspot.com",
+        messagingSenderId: "865033014110",
+        appId: "1:865033014110:web:49435d6cd66afd60b19dcf",
+        measurementId: "G-P2N41DQ5R1"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.firestore();
+
+    // Function to generate the calendar
+    function generateCalendar() {
+        var daysContainer = document.getElementById('days');
+        var monthYear = document.getElementById('month-year');
+        var todayActivity = document.getElementById('today-activity');
+        var today = new Date();
+        var currentMonth = today.getMonth();
+        var currentYear = today.getFullYear();
+        var firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        var lastDate = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+        // Set month and year
+        var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        monthYear.innerText = monthNames[currentMonth] + " " + currentYear;
+
+        // Clear previous days
+        daysContainer.innerHTML = '';
+
+        // Add empty days for the first week
+        for (var i = 0; i < firstDay; i++) {
+            var emptyDay = document.createElement('li');
+            daysContainer.appendChild(emptyDay);
+        }
+
+        // Add days of the month
+        for (var day = 1; day <= lastDate; day++) {
+            var dayElement = document.createElement('li');
+            dayElement.innerText = day;
+            if (day === today.getDate()) {
+                dayElement.classList.add('active');
+            }
+            daysContainer.appendChild(dayElement);
+        }
+
+        // Fetch and display events
+        db.collection("events").orderBy("timestamp", "desc").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                var event = doc.data();
+                var eventDate = new Date(event.date).getDate();
+                var dayElements = daysContainer.getElementsByTagName('li');
+                for (var i = 0; i < dayElements.length; i++) {
+                    var dayElement = dayElements[i];
+                    var dayNumber = parseInt(dayElement.innerText);
+                    if (dayNumber === eventDate) {
+                        dayElement.innerHTML += '<br><span style="color: red;">' + event.description + '</span>';
+                        if (dayNumber === today.getDate()) {
+                            todayActivity.innerHTML = event.description;
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    // Generate the calendar on window load
+    window.onload = generateCalendar;
+</script>
+
+</body>
+</html>

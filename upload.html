@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload PDF - AGNES Nigeria Parliament</title>
+    <title>Upload PDF, Article, and Calendar Event - AGNES Nigeria Parliament</title>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -53,6 +53,32 @@
                     </form>
                     <div id="upload-article-success" class="alert alert-success mt-3" style="display: none;">
                         Article uploaded successfully!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-4">
+                    <h2 class="heading-section">Upload Calendar Event</h2>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form id="upload-event-form">
+                        <div class="form-group">
+                            <input type="date" id="event-date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="event-description" placeholder="Event Description" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Upload Event</button>
+                    </form>
+                    <div id="upload-event-success" class="alert alert-success mt-3" style="display: none;">
+                        Event uploaded successfully!
                     </div>
                 </div>
             </div>
@@ -126,6 +152,26 @@
             })
             .catch(function(error) {
                 console.error("Error adding document: ", error);
+            });
+        });
+
+        // Handle Calendar Event upload
+        document.getElementById('upload-event-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var date = document.getElementById('event-date').value;
+            var description = document.getElementById('event-description').value;
+
+            db.collection("events").add({
+                date: date,
+                description: description,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(function(docRef) {
+                console.log("Event written with ID: ", docRef.id);
+                document.getElementById('upload-event-success').style.display = 'block';
+            })
+            .catch(function(error) {
+                console.error("Error adding event: ", error);
             });
         });
     </script>

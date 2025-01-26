@@ -12,7 +12,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
         
         <!-- title of site -->
-        <title>Dashboard</title>
+        <title>Dashboard - AGNES Nigeria Parliament</title>
 
         <!-- For favicon png -->
 		<link rel="shortcut icon" type="image/icon" href="assets/logo/favicon.jpg"/>
@@ -53,6 +53,79 @@
 			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
 
+        <style>
+            /* FAB styles */
+            .fab {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 56px;
+                height: 56px;
+                background-color: #1abc9c;
+                border-radius: 50%;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 24px;
+                cursor: pointer;
+                z-index: 1000;
+            }
+
+            /* Chat container styles */
+            .chat-container {
+                position: fixed;
+                bottom: 80px;
+                right: 20px;
+                width: 300px;
+                max-height: 400px;
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+                display: none;
+                flex-direction: column;
+                z-index: 1000;
+            }
+
+            .chat-header {
+                background-color: #1abc9c;
+                color: white;
+                padding: 10px;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                text-align: center;
+            }
+
+            .chat-body {
+                flex: 1;
+                padding: 10px;
+                overflow-y: auto;
+            }
+
+            .chat-footer {
+                display: flex;
+                padding: 10px;
+                border-top: 1px solid #ddd;
+            }
+
+            .chat-footer input {
+                flex: 1;
+                padding: 5px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+            .chat-footer button {
+                background-color: #1abc9c;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                margin-left: 5px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+        </style>
     </head>
 	
 	<body>
@@ -428,6 +501,23 @@
         </div>
     </section>
 <!--CALENDAR--!>
+<!-- Floating Action Button -->
+<div class="fab" onclick="toggleChat()">+</div>
+
+<!-- Chat Container -->
+<div class="chat-container" id="chat-container">
+    <div class="chat-header">
+        AI Chatbot
+    </div>
+    <div class="chat-body" id="chat-body">
+        <!-- Chat messages will be dynamically inserted here -->
+    </div>
+    <div class="chat-footer">
+        <input type="text" id="chat-input" placeholder="Ask a question...">
+        <button onclick="askQuestion()">Send</button>
+    </div>
+</div>
+
 <!--footer start-->
 <footer id="footer"  class="footer">
     <div class="container">
@@ -509,6 +599,74 @@
      
 <!--Custom JS-->
 <script src="assets/js/custom.js"></script>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+<script src="https://unpkg.com/compromise@13.11.0/builds/compromise.min.js"></script>
+
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyAhmwL-einZeeQzistwL1UfzFIvRvvuAI0",
+        authDomain: "m-and-a-tool.firebaseapp.com",
+        projectId: "m-and-a-tool",
+        storageBucket: "m-and-a-tool.appspot.com",
+        messagingSenderId: "865033014110",
+        appId: "1:865033014110:web:49435d6cd66afd60b19dcf",
+        measurementId: "G-P2N41DQ5R1"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.firestore();
+    var storage = firebase.storage();
+
+    // Toggle chat container visibility
+    function toggleChat() {
+        var chatContainer = document.getElementById('chat-container');
+        if (chatContainer.style.display === 'none' || chatContainer.style.display === '') {
+            chatContainer.style.display = 'flex';
+        } else {
+            chatContainer.style.display = 'none';
+        }
+    }
+
+    // Handle question submission
+    function askQuestion() {
+        var input = document.getElementById('chat-input');
+        var question = input.value;
+        input.value = '';
+
+        var chatBody = document.getElementById('chat-body');
+        var userMessage = document.createElement('div');
+        userMessage.textContent = 'You: ' + question;
+        chatBody.appendChild(userMessage);
+
+        // Fetch PDFs from Firebase Storage and process them
+        storage.ref('pdfs').listAll().then(function(result) {
+            result.items.forEach(function(pdfRef) {
+                pdfRef.getDownloadURL().then(function(url) {
+                    fetch(url).then(function(response) {
+                        return response.text();
+                    }).then(function(text) {
+                        var doc = nlp(text);
+                        var match = doc.match(question);
+                        var botMessage = document.createElement('div');
+                        if (match.found) {
+                            botMessage.textContent = 'Bot: ' + match.out('text');
+                        } else {
+                            botMessage.textContent = 'Bot: No relevant information found.';
+                        }
+                        chatBody.appendChild(botMessage);
+                        chatBody.scrollTop = chatBody.scrollHeight;
+                    });
+                });
+            });
+        });
+    }
+</script>
 
 </body>
 

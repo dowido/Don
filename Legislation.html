@@ -2,17 +2,15 @@
 <html lang="en">
 
 <head>
-    <!-- meta data and links -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Legislation Documents</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legislations - AGNES Nigeria Parliament</title>
 
     <!-- For favicon png -->
     <link rel="shortcut icon" type="image/icon" href="assets/logo/favicon.jpg" />
 
     <!-- Include necessary CSS files -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -20,8 +18,6 @@
 
     <style>
         table {
-            width: 100%;
-            margin: 20px 0;
             border-collapse: collapse;
         }
 
@@ -37,42 +33,56 @@
         th {
             background-color: #f2f2f2;
         }
+        .navbar-custom {
+            background-color: #1abc9c;
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: white;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #f1c40f;
+        }
+        .navbar-custom .navbar-toggler {
+            border-color: white;
+        }
+        .navbar-custom .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+
+        .navbar-nav .nav-item {
+            margin-left: 15px;
+            margin-right: 15px;
+        }
     </style>
 </head>
 
 <body>
-    <!--header section-->
-    <section class="top-area">
-        <div class="header-area">
-            <!-- Start Navigation -->
-            <nav class="navbar navbar-default bootsnav navbar-sticky navbar-scrollspy" data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
-                <div class="container">
-                    <!-- Start Header Navigation -->
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
-                            <i class="fa fa-bars"></i>
-                        </button>
-                        <a class="navbar-brand" href="index.html">FEDERAL REPUBLIC OF NIGERIA <span>NATIONAL ASSEMBLY</span></a>
-                    </div>
-                    <!-- End Header Navigation -->
-
-                    <!-- Collect the nav links -->
-                    <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
-                        <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
-                            <li class=" scroll"><a href="dashboard.html">home</a></li>
-                            <li><a href="policy.html">Policies</a></li>
-                            <li class="scroll"><a href="Budget.html">Budget</a></li>
-                            <li class="scroll"><a href="Legislation.html">Legislations</a></li>
-<!--                             <li class="scroll"><a href="Pronouncement.html">From Govt</a></li> -->
-                            <li class="scroll"><a href="pages/table-08/index.html">GIS</a></li>
-                            <!-- <li class="scroll"><a href="#contact">Login</a></li> -->
-                        </ul><!--/.nav -->
-                    </div>
-                </div>
-            </nav>
-            <!-- End Navigation -->
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="#">AGNES Nigeria Parliament</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="upload.html">Upload</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="calendar.html">Calendar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Legislation.html">Legislation</a>
+                </li>
+            </ul>
         </div>
-        <div class="clearfix"></div>
+    </nav>
+
+    <div class="clearfix"></div>
     </section>
     <!--header end-->
 
@@ -101,109 +111,8 @@
                         <th>Download</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>2024-10-25</td>
-                        <td>National Assembly Plenary - Climate Change Bills</td>
-                        <td><a href="docs/11033.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-02</td>
-                        <td>Special Committee Session - Health Budget Review</td>
-                        <td><a href="docs/11032.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-15</td>
-                        <td>ACT- Climate Change</td>
-                        <td><a href="docs/11069.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-12-05</td>
-                        <td>Legislative Workshop - Capacity Building for Climate Action</td>
-                        <td><a href="docs/11034.pdf" download>Download PDF</a></td>
-                    </tr>
-                     <tr>
-                        <td>2024-10-25</td>
-                        <td>National Assembly Plenary - Climate Change Bills</td>
-                        <td><a href="docs/11070.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-02</td>
-                        <td>Special Committee Session - Health Budget Review</td>
-                        <td><a href="docs/11067.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-15</td>
-                        <td>ACT- Climate Change</td>
-                        <td><a href="docs/11053.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-12-05</td>
-                        <td>Legislative Workshop - Capacity Building for Climate Action</td>
-                        <td><a href="docs/11070.pdf" download>Download PDF</a></td>
-                    </tr>
-                     <tr>
-                        <td>2024-10-25</td>
-                        <td>National Assembly Plenary - Climate Change Bills</td>
-                        <td><a href="docs/11070.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-02</td>
-                        <td>Special Committee Session - Health Budget Review</td>
-                        <td><a href="docs/11070.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-15</td>
-                        <td>ACT- Climate Change</td>
-                        <td><a href="docs/11053.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-12-05</td>
-                        <td>Legislative Workshop - Capacity Building for Climate Action</td>
-                        <td><a href="docs/11053.pdf" download>Download PDF</a></td>
-                    </tr>
-                     <tr>
-                        <td>2024-10-25</td>
-                        <td>National Assembly Plenary - Climate Change Bills</td>
-                        <td><a href="docs/11053.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-02</td>
-                        <td>Special Committee Session - Health Budget Review</td>
-                        <td><a href="docs/11053.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-15</td>
-                        <td>ACT- Climate Change</td>
-                        <td><a href="docs/11053.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-12-05</td>
-                        <td>Legislative Workshop - Capacity Building for Climate Action</td>
-                        <td><a href="docs/11070.pdf" download>Download PDF</a></td>
-                    </tr>
-                     <tr>
-                        <td>2024-10-25</td>
-                        <td>National Assembly Plenary - Climate Change Bills</td>
-                        <td><a href="docs/11053.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-02</td>
-                        <td>Special Committee Session - Health Budget Review</td>
-                        <td><a href="docs/11053.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-15</td>
-                        <td>ACT- Climate Change</td>
-                        <td><a href="docs/11053.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-12-05</td>
-                        <td>Legislative Workshop - Capacity Building for Climate Action</td>
-                        <td><a href="docs/11053.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <!-- Add more rows here as needed -->
-              
+                <tbody id="calendarTableBody">
+                    <!-- Rows will be dynamically inserted here -->
                 </tbody>
             </table>
         </div>
@@ -257,16 +166,41 @@
         </div>
     </footer>
 
-    <!-- jQuery and DataTables JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('#calendarTable').DataTable({
-                "pageLength": 5, // Initial rows per page
-                "lengthMenu": [5, 10, 15, 20], // Option for users to select number of rows
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyAhmwL-einZeeQzistwL1UfzFIvRvvuAI0",
+            authDomain: "m-and-a-tool.firebaseapp.com",
+            projectId: "m-and-a-tool",
+            storageBucket: "m-and-a-tool.appspot.com",
+            messagingSenderId: "865033014110",
+            appId: "1:865033014110:web:49435d6cd66afd60b19dcf",
+            measurementId: "G-P2N41DQ5R1"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        // Fetch and display legislative events
+        db.collection("legislativeEvents").orderBy("date", "asc").get().then((querySnapshot) => {
+            var tableBody = document.getElementById('calendarTableBody');
+            querySnapshot.forEach((doc) => {
+                var event = doc.data();
+                var row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${event.date}</td>
+                    <td>${event.document}</td>
+                    <td><a href="${event.downloadUrl}" download>Download PDF</a></td>
+                `;
+                tableBody.appendChild(row);
             });
+            // Initialize DataTable
+            $('#calendarTable').DataTable();
         });
     </script>
 
