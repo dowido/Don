@@ -61,6 +61,7 @@
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
     <script>
@@ -77,6 +78,14 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         var db = firebase.firestore();
+
+        // Check if user is authenticated
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (!user) {
+                // Redirect to login page if not authenticated
+                window.location.href = 'index.html#login';
+            }
+        });
 
         // Handle PDF upload
         document.getElementById('upload-form').addEventListener('submit', function (e) {
