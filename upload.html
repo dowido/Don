@@ -73,6 +73,9 @@
                             <input type="date" id="event-date" class="form-control" required>
                         </div>
                         <div class="form-group">
+                            <input type="time" id="event-time" class="form-control" required>
+                        </div>
+                        <div class="form-group">
                             <input type="text" id="event-description" placeholder="Event Description" class="form-control" required>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Upload Event</button>
@@ -159,10 +162,12 @@
         document.getElementById('upload-event-form').addEventListener('submit', function (e) {
             e.preventDefault();
             var date = document.getElementById('event-date').value;
+            var time = document.getElementById('event-time').value;
             var description = document.getElementById('event-description').value;
 
             db.collection("events").add({
                 date: date,
+                time: time,
                 description: description,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             })

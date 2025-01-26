@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Budget Documents - AGNES Nigeria Parliament</title>
+    <title>Budget - AGNES Nigeria Parliament</title>
 
     <!-- For favicon png -->
     <link rel="shortcut icon" type="image/icon" href="assets/logo/favicon.jpg" />
@@ -23,18 +23,75 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
     <script>
         // Your web app's Firebase configuration
         var firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyAhmwL-einZeeQzistwL1UfzFIvRvvuAI0",
+            authDomain: "m-and-a-tool.firebaseapp.com",
+            projectId: "m-and-a-tool",
+            storageBucket: "m-and-a-tool.appspot.com",
+            messagingSenderId: "865033014110",
+            appId: "1:865033014110:web:49435d6cd66afd60b19dcf",
+            measurementId: "G-P2N41DQ5R1"
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        // Protect the route and show welcome message
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (!user) {
+                // User is not signed in, redirect to login page
+                window.location.href = 'index.html#login';
+            } else {
+                // User is signed in, show welcome message
+                alert("Welcome " + user.displayName);
+            }
+        });
+
+        // Sign up function
+        function signUp() {
+            var email = document.getElementById("signup-email").value;
+            var password = document.getElementById("signup-password").value;
+            var username = document.getElementById("signup-username").value;
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Signed up
+                    var user = userCredential.user;
+                    // Update user profile with username
+                    user.updateProfile({
+                        displayName: username
+                    }).then(() => {
+                        console.log('User profile updated with username');
+                    }).catch((error) => {
+                        console.error('Error updating user profile:', error);
+                    });
+                })
+                .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.error("Error signing up:", errorCode, errorMessage);
+                });
+        }
+
+        // Log in function
+        function logIn() {
+            var email = document.getElementById("login-email").value;
+            var password = document.getElementById("login-password").value;
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Logged in
+                    var user = userCredential.user;
+                    console.log("User logged in:", user);
+                    alert("Welcome " + user.displayName);
+                })
+                .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.error("Error logging in:", errorCode, errorMessage);
+                });
+        }
     </script>
 
     <style>
@@ -71,7 +128,7 @@
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
                             <i class="fa fa-bars"></i>
                         </button>
-                        <a class="navbar-brand" href="index.html">FEDERAL REPUBLIC OF NIGERIA <span>NATIONAL ASSEMBLY</span></a>
+                        <a class="navbar-brand" href="index.html">AGNES Nigeria Parliament</a>
                     </div>
                     <!-- End Header Navigation -->
 
@@ -225,40 +282,7 @@
     </section>
 
     <!-- Project GIS Table -->
-    <section class="ftco-section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6 text-center mb-4">
-                    <h2 class="heading-section">Project GIS Table</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <h3 class="h5 mb-4 text-center">Ground-Truthing is Important. See if the project exists.</h3>
-                    <div class="table-wrap">
-                        <table class="table myaccordion table-hover" id="accordion">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Project Name</th>
-                                    <th>Location Details</th>
-                                    <th>Google Earth Link</th>
-                                    <th>&nbsp;</th>
-                                </tr>
-                            </thead>
-                            <!-- Your existing table content -->
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Document Scraping Form -->
-    <form onsubmit="scrapeDocument(); return false;">
-        <input type="text" id="document-url" placeholder="Enter document URL" required>
-        <button type="submit">Scrape Document</button>
-    </form>
+   
 
     <!-- Table to Display Climate Funds Percentage -->
     <h2>Climate Funds Usage</h2>
@@ -278,20 +302,6 @@
     </table>
 
     <!-- Uploaded Budget Documents Table -->
-    <div class="container mt-5">
-        <h1>Uploaded Budget Documents</h1>
-        <table id="pdfTable" class="display">
-            <thead>
-                <tr>
-                    <th>File Name</th>
-                    <th>Download Link</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Rows will be populated by JavaScript -->
-            </tbody>
-        </table>
-    </div>
 
     <!--footer section-->
     <footer id="footer" class="footer">
@@ -309,7 +319,7 @@
                             <li class="scroll"><a href="#explore">Content</a></li>
                             <li class="scroll"><a href="#reviews">reviews</a></li>
                             <li class="scroll"><a href="#blog">News</a></li>
-                            <li class="scroll"><a href="#contact">Login</a></li>
+                           
                             <li class="scroll"><a href="#contact">my account</a></li>
                         </ul>
                     </div>
@@ -397,6 +407,7 @@
                     // Logged in
                     var user = userCredential.user;
                     console.log("User logged in:", user);
+                    alert("Welcome " + user.displayName);
                 })
                 .catch((error) => {
                     var errorCode = error.code;
@@ -435,6 +446,20 @@
 
         // Call the function to fetch and display climate funds percentage
         fetchClimateFundsPercentage();
+    </script>
+
+    <!-- Chatbase Embed Script -->
+    <script>
+        window.embeddedChatbotConfig = {
+            chatbotId: "TE2yjdFfvUnSrrmyEq2yx",
+            domain: "www.chatbase.co"
+        }
+    </script>
+    <script
+        src="https://www.chatbase.co/embed.min.js"
+        chatbotId="TE2yjdFfvUnSrrmyEq2yx"
+        domain="www.chatbase.co"
+        defer>
     </script>
 
     <!-- Include your JS files -->

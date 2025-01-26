@@ -66,6 +66,7 @@
             margin-bottom: 5px;
             font-size: 12px;
             color: #777;
+            cursor: pointer;
         }
 
         .days li.active {
@@ -86,6 +87,22 @@
 
         @media screen and (max-width: 290px) {
             .weekdays li, .days li {width: 12.2%;}
+        }
+
+        .event-table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .event-table th, .event-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .event-table th {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
@@ -117,6 +134,21 @@
 <ul class="days" id="days">
     <!-- Days will be dynamically inserted here -->
 </ul>
+
+<!-- Event Table -->
+<div class="container">
+    <table class="event-table" id="event-table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody id="event-table-body">
+            <!-- Events will be dynamically inserted here -->
+        </tbody>
+    </table>
+</div>
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
@@ -167,6 +199,9 @@
             if (day === today.getDate()) {
                 dayElement.classList.add('active');
             }
+            dayElement.addEventListener('click', function() {
+                showEventsForDay(day);
+            });
             daysContainer.appendChild(dayElement);
         }
 
@@ -188,6 +223,25 @@
                 }
             });
         });
+    }
+
+    // Function to show events for a given day
+    function showEventsForDay(day) {
+        var eventTableBody = document.getElementById('event-table-body');
+        eventTableBody.innerHTML = ''; // Clear previous events
+
+        db.collection("events").where("date", "==", new Date(new Date().getFullYear(), new Date().getMonth(), day).toISOString().split('T')[0])
+            .orderBy("time", "asc").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    var event = doc.data();
+                    var row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${event.time}</td>
+                        <td>${event.description}</td>
+                    `;
+                    eventTableBody.appendChild(row);
+                });
+            });
     }
 
     // Generate the calendar on window load

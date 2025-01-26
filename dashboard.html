@@ -125,6 +125,25 @@
                 border-radius: 5px;
                 cursor: pointer;
             }
+
+            .fab-options {
+                position: fixed;
+                bottom: 80px;
+                right: 20px;
+                display: none;
+                flex-direction: column;
+                z-index: 1000;
+            }
+
+            .fab-option {
+                background-color: #1abc9c;
+                color: white;
+                padding: 10px;
+                margin-bottom: 10px; /* Added margin to space the options */
+                border-radius: 5px;
+                cursor: pointer;
+                text-align: center;
+            }
         </style>
     </head>
 	
@@ -471,30 +490,6 @@
                         <td>Capacity Building for Climate Action</td>
                         <td><a href="docs/climate_action_workshop.pdf" download>Download PDF</a></td>
                     </tr>
-                    <tr>
-                        <td>2024-10-25</td>
-                        <td>National Assembly Plenary</td>
-                        <td>Debate on Climate Change Bills</td>
-                        <td><a href="docs/climate_change_bills_agenda.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-02</td>
-                        <td>Special Committee Session</td>
-                        <td>Budget Review for Health Sector</td>
-                        <td><a href="docs/health_budget_agenda.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-15</td>
-                        <td>Parliamentary Hearing</td>
-                        <td>Public Hearing on Renewable Energy Policy</td>
-                        <td><a href="docs/renewable_energy_hearing.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-12-05</td>
-                        <td>Legislative Workshop</td>
-                        <td>Capacity Building for Climate Action</td>
-                        <td><a href="docs/climate_action_workshop.pdf" download>Download PDF</a></td>
-                    </tr>
                     <!-- More rows can be added -->
                 </tbody>
             </table>
@@ -502,7 +497,13 @@
     </section>
 <!--CALENDAR--!>
 <!-- Floating Action Button -->
-<div class="fab" onclick="toggleChat()">+</div>
+<div class="fab" onclick="toggleFabOptions()">+</div>
+
+<!-- FAB Options -->
+<div class="fab-options" id="fab-options">
+    <div class="fab-option" onclick="selectAI('pdf')">PDF Answering AI</div>
+    <div class="fab-option" onclick="selectAI('generative')">Generative AI</div>
+</div>
 
 <!-- Chat Container -->
 <div class="chat-container" id="chat-container">
@@ -623,6 +624,25 @@
     var db = firebase.firestore();
     var storage = firebase.storage();
 
+    var selectedAI = 'pdf'; // Default to PDF Answering AI
+
+    // Toggle FAB options visibility
+    function toggleFabOptions() {
+        var fabOptions = document.getElementById('fab-options');
+        if (fabOptions.style.display === 'none' || fabOptions.style.display === '') {
+            fabOptions.style.display = 'flex';
+        } else {
+            fabOptions.style.display = 'none';
+        }
+    }
+
+    // Select AI type
+    function selectAI(type) {
+        selectedAI = type;
+        toggleFabOptions();
+        toggleChat();
+    }
+
     // Toggle chat container visibility
     function toggleChat() {
         var chatContainer = document.getElementById('chat-container');
@@ -634,7 +654,7 @@
     }
 
     // Handle question submission
-    function askQuestion() {
+    async function askQuestion() {
         var input = document.getElementById('chat-input');
         var question = input.value;
         input.value = '';
@@ -644,28 +664,59 @@
         userMessage.textContent = 'You: ' + question;
         chatBody.appendChild(userMessage);
 
-        // Fetch PDFs from Firebase Storage and process them
-        storage.ref('pdfs').listAll().then(function(result) {
-            result.items.forEach(function(pdfRef) {
-                pdfRef.getDownloadURL().then(function(url) {
-                    fetch(url).then(function(response) {
-                        return response.text();
-                    }).then(function(text) {
-                        var doc = nlp(text);
-                        var match = doc.match(question);
-                        var botMessage = document.createElement('div');
-                        if (match.found) {
-                            botMessage.textContent = 'Bot: ' + match.out('text');
-                        } else {
-                            botMessage.textContent = 'Bot: No relevant information found.';
-                        }
-                        chatBody.appendChild(botMessage);
-                        chatBody.scrollTop = chatBody.scrollHeight;
+        if (selectedAI === 'pdf') {
+            // PDF Answering AI
+            storage.ref('pdfs').listAll().then(function(result) {
+                result.items.forEach(function(pdfRef) {
+                    pdfRef.getDownloadURL().then(function(url) {
+                        fetch(url).then(function(response) {
+                            return response.text();
+                        }).then(function(text) {
+                            var doc = nlp(text);
+                            var match = doc.match(question);
+                            var botMessage = document.createElement('div');
+                            if (match.found) {
+                                botMessage.textContent = 'Bot: ' + match.out('text');
+                            } else {
+                                botMessage.textContent = 'Bot: No relevant information found.';
+                            }
+                            chatBody.appendChild(botMessage);
+                            chatBody.scrollTop = chatBody.scrollHeight;
+                        });
                     });
                 });
             });
-        });
+        } else if (selectedAI === 'generative') {
+            // Generative AI
+            var response = await fetch('YOUR_SERVERLESS_FUNCTION_URL', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ question: question })
+            });
+            var data = await response.json();
+
+            var botMessage = document.createElement('div');
+            botMessage.textContent = 'Bot: ' + data.answer;
+            chatBody.appendChild(botMessage);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
     }
+</script>
+
+<!-- Chatbase Embed Script -->
+<script>
+    window.embeddedChatbotConfig = {
+        chatbotId: "TE2yjdFfvUnSrrmyEq2yx",
+        domain: "www.chatbase.co"
+    }
+</script>
+<script
+    src="https://www.chatbase.co/embed.min.js"
+    chatbotId="TE2yjdFfvUnSrrmyEq2yx"
+    domain="www.chatbase.co"
+    defer>
 </script>
 
 </body>
