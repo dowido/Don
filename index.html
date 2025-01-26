@@ -31,18 +31,80 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+
+    <!-- Compromise NLP library -->
+    <script src="https://unpkg.com/compromise@13.11.0/builds/compromise.min.js"></script>
+
     <script>
         // Your web app's Firebase configuration
         var firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyAhmwL-einZeeQzistwL1UfzFIvRvvuAI0",
+  authDomain: "m-and-a-tool.firebaseapp.com",
+  projectId: "m-and-a-tool",
+  storageBucket: "m-and-a-tool.firebasestorage.app",
+  messagingSenderId: "865033014110",
+  appId: "1:865033014110:web:49435d6cd66afd60b19dcf",
+  measurementId: "G-P2N41DQ5R1"
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        // Fetch and display articles
+        window.onload = function() {
+            var articlesContainer = document.getElementById('articles-container');
+            db.collection("articles").orderBy("timestamp", "desc").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    var article = doc.data();
+                    var articleElement = document.createElement('div');
+                    articleElement.className = 'article';
+                    articleElement.innerHTML = `
+                        <h3>${article.title}</h3>
+                        <p>${article.content}</p>
+                        <hr>
+                    `;
+                    articlesContainer.appendChild(articleElement);
+                });
+            });
+        };
+
+        // AI Chatbot function
+        function askQuestion() {
+            var question = document.getElementById("chatbot-question").value;
+            var articlesContainer = document.getElementById('articles-container');
+            var articles = articlesContainer.getElementsByClassName('article');
+            var answers = [];
+
+            for (var i = 0; i < articles.length; i++) {
+                var article = articles[i];
+                var title = article.getElementsByTagName('h3')[0].innerText;
+                var content = article.getElementsByTagName('p')[0].innerText;
+                var doc = nlp(content);
+                var match = doc.match(question);
+                if (match.found) {
+                    answers.push({ title: title, content: content });
+                }
+            }
+
+            var answerContainer = document.getElementById('chatbot-answer');
+            answerContainer.innerHTML = '';
+            if (answers.length > 0) {
+                answers.forEach(function(answer) {
+                    var answerElement = document.createElement('div');
+                    answerElement.className = 'answer';
+                    answerElement.innerHTML = `
+                        <h4>${answer.title}</h4>
+                        <p>${answer.content}</p>
+                        <hr>
+                    `;
+                    answerContainer.appendChild(answerElement);
+                });
+            } else {
+                answerContainer.innerHTML = '<p>No relevant information found.</p>';
+            }
+        }
     </script>
 
     <!-- Chatbot CSS -->
@@ -200,12 +262,13 @@
     <script>
         // Your web app's Firebase configuration
         var firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyAhmwL-einZeeQzistwL1UfzFIvRvvuAI0",
+  authDomain: "m-and-a-tool.firebaseapp.com",
+  projectId: "m-and-a-tool",
+  storageBucket: "m-and-a-tool.firebasestorage.app",
+  messagingSenderId: "865033014110",
+  appId: "1:865033014110:web:49435d6cd66afd60b19dcf",
+  measurementId: "G-P2N41DQ5R1"
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -593,6 +656,44 @@
 		</section><!--/.blog-->
 		<!--blog end -->
 
+        <!-- Articles Section -->
+        <section class="ftco-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 text-center mb-4">
+                        <h2 class="heading-section">Articles</h2>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-8" id="articles-container">
+                        <!-- Articles will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chatbot Section -->
+        <section class="ftco-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 text-center mb-4">
+                        <h2 class="heading-section">AI Chatbot</h2>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <input type="text" id="chatbot-question" placeholder="Ask a question..." class="form-control">
+                        </div>
+                        <button onclick="askQuestion()" class="btn btn-primary btn-block">Ask</button>
+                        <div id="chatbot-answer" class="mt-3">
+                            <!-- Answers will be dynamically inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
 		<!--subscription strat -->
 		<section id="contact"  class="subscription">
 			<div class="container">
@@ -608,7 +709,7 @@
 					<div class="col-sm-12">
 						<div class="subscription-input-group">
 							<form action="#">
-								<input type="number" class="subscription-input-form" placeholder="Enter your Login Credential Here">
+								<input type="number" class="subscription-input-form" placeholder="Click here to continue as guest">
 								<button class="appsLand-btn subscribe-btn" onclick="window.location.href='dashboard.html'; return false;">
 									Login
 								  </button>								  
@@ -631,7 +732,7 @@
                         <label for="login-password">Password</label>
                         <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Log In</button>
+                    <button type="submit" class="btn btn-primary">Log In <a href="Budget.html"></a></button>
                     <div class="text-center">
                         <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
                     </div>
