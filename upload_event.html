@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Document - AGNES Nigeria Parliament</title>
+    <title>Upload Event - AGNES Nigeria Parliament</title>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <style>
         body {
@@ -57,15 +57,23 @@
 </head>
 <body>
     <div class="upload-container">
-        <h2>Upload Document</h2>
-        <form id="upload-document-form">
+        <h2>Upload Calendar Event</h2>
+        <form id="upload-event-form">
             <div class="form-group">
-                <label for="document-file">Choose File</label>
-                <input type="file" id="document-file" class="form-control" required>
+                <label for="event-date">Event Date</label>
+                <input type="date" id="event-date" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Upload Document</button>
-            <div id="upload-document-success" class="alert alert-success mt-3" style="display: none;">
-                Document uploaded successfully!
+            <div class="form-group">
+                <label for="event-time">Event Time</label>
+                <input type="time" id="event-time" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="event-description">Event Description</label>
+                <input type="text" id="event-description" placeholder="Event Description" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Upload Event</button>
+            <div id="upload-event-success" class="alert alert-success mt-3" style="display: none;">
+                Event uploaded successfully!
             </div>
         </form>
     </div>
@@ -74,7 +82,6 @@
     <script src="assets/js/scripts.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
     <script>
         // Your web app's Firebase configuration
@@ -89,18 +96,24 @@
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        var storage = firebase.storage();
+        var db = firebase.firestore();
 
-        // Handle document upload
-        document.getElementById('upload-document-form').addEventListener('submit', function (e) {
+        // Handle event upload
+        document.getElementById('upload-event-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            var file = document.getElementById('document-file').files[0];
-            var storageRef = storage.ref('documents/' + file.name);
+            var date = document.getElementById('event-date').value;
+            var time = document.getElementById('event-time').value;
+            var description = document.getElementById('event-description').value;
 
-            storageRef.put(file).then(function (snapshot) {
-                document.getElementById('upload-document-success').style.display = 'block';
+            db.collection('events').add({
+                date: date,
+                time: time,
+                description: description,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(function () {
+                document.getElementById('upload-event-success').style.display = 'block';
             }).catch(function (error) {
-                console.error('Error uploading document:', error);
+                console.error('Error uploading event:', error);
             });
         });
     </script>

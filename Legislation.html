@@ -57,34 +57,35 @@
     </style>
 </head>
 
-<body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-custom">
-        <a class="navbar-brand" href="#">AGNES Nigeria Parliament</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="upload.html">Upload</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="calendar.html">Calendar</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Legislation.html">Legislation</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+<body> <!--header section-->
+    <section class="top-area">
+        <div class="header-area">
+            <!-- Start Navigation -->
+            <nav class="navbar navbar-default bootsnav navbar-sticky navbar-scrollspy" data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
+                <div class="container">
+                    <!-- Start Header Navigation -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <a class="navbar-brand" href="index.html">AGNES Nigeria Parliament</a>
+                    </div>
+                    <!-- End Header Navigation -->
 
-    <div class="clearfix"></div>
-    </section>
-    <!--header end-->
+                    <!-- Collect the nav links -->
+                    <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
+                        <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+                            <li class=" scroll"><a href="dashboard.html">home</a></li>
+                            <li><a href="policy.html">Policies</a></li>
+                            <li class="scroll"><a href="Budget.html">Budget</a></li>
+                            <li class="scroll"><a href="calendar.html">calendar</a></li>
+                            <li class="scroll"><a href="pages/table-08/index.html">GIS</a></li>
+                        </ul><!--/.nav -->
+                    </div>
+                </div>
+            </nav>
+            <!-- End Navigation -->
+        </div>
 
     <!--welcome hero-->
     <section id="home" class="dash-hero-page">
@@ -204,19 +205,6 @@
         });
     </script>
 
-    <!-- Chatbase Embed Script -->
-    <script>
-        window.embeddedChatbotConfig = {
-            chatbotId: "TE2yjdFfvUnSrrmyEq2yx",
-            domain: "www.chatbase.co"
-        }
-    </script>
-    <script
-        src="https://www.chatbase.co/embed.min.js"
-        chatbotId="TE2yjdFfvUnSrrmyEq2yx"
-        domain="www.chatbase.co"
-        defer>
-    </script>
-
+   
 </body>
 </html>

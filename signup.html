@@ -7,41 +7,52 @@
     <title>Sign Up - AGNES Nigeria Parliament</title>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <style>
-        .auth-form {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
+        body {
+            font-family: Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .signup-container {
+            background: white;
+            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background-color: #fff;
-        }
-
-        .auth-form h2 {
-            margin-bottom: 20px;
-            font-size: 24px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .auth-form .form-group {
-            margin-bottom: 15px;
-        }
-
-        .auth-form .form-control {
-            height: 45px;
-            border-radius: 5px;
-        }
-
-        .auth-form .btn {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
             width: 100%;
-            padding: 10px;
-            border-radius: 5px;
         }
 
-        .auth-form .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+        .signup-container h2 {
+            text-align: center;
+            color: #008751; /* Darker green similar to the Nigerian flag */
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            color: #008751;
+        }
+
+        .btn-primary {
+            background-color: #008751;
+            border-color: #008751;
+        }
+
+        .btn-primary:hover {
+            background-color: #006b3f;
+            border-color: #006b3f;
+        }
+
+        .text-center a {
+            color: #008751;
+        }
+
+        .alert-success a {
+            color: #006b3f;
         }
     </style>
 
@@ -65,7 +76,7 @@
 </head>
 
 <body>
-    <div class="auth-form">
+    <div class="signup-container">
         <h2>Sign Up</h2>
         <form id="signup-form">
             <div class="form-group">
@@ -80,7 +91,7 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-primary">Sign Up</button>
+            <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
             <div class="text-center">
                 <p>Already have an account? <a href="index.html#login">Log In</a></p>
             </div>
@@ -102,23 +113,23 @@
 
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    // Signed up
                     var user = userCredential.user;
-                    // Update user profile with username
-                    user.updateProfile({
+                    return user.updateProfile({
                         displayName: username
-                    }).then(() => {
-                        console.log('User profile updated with username');
-                        // Redirect to login page
-                        window.location.href = 'index.html#login';
-                    }).catch((error) => {
-                        console.error('Error updating user profile:', error);
                     });
                 })
+                .then(() => {
+                    var user = firebase.auth().currentUser;
+                    return db.collection('users').doc(user.uid).set({
+                        username: username,
+                        email: email
+                    });
+                })
+                .then(() => {
+                    document.getElementById('signup-success').style.display = 'block';
+                })
                 .catch((error) => {
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    console.error('Error signing up:', errorCode, errorMessage);
+                    console.error('Error signing up:', error);
                 });
         });
     </script>

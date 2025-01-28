@@ -716,7 +716,7 @@
             <!-- Log In Form -->
             <div class="auth-form" id="login">
                 <h2>Log In</h2>
-                <form onsubmit="event.preventDefault(); login();">
+                <form id="login-form">
                     <div class="form-group">
                         <label for="login-email">Email</label>
                         <input type="email" id="login-email" class="form-control" placeholder="Enter your email" required>
@@ -725,9 +725,12 @@
                         <label for="login-password">Password</label>
                         <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Log In <a href="Budget.html"></a></button>
+                    <button type="submit" class="btn btn-success">Log In <a href="Budget.html"></a></button>
                     <div class="text-center">
-                        <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+                       
+                    </div>
+                    <div id="login-success" class="alert alert-success mt-3" style="display: none;">
+                        Login successful! Redirecting to <a href="dashboard.html">dashboard</a>...
                     </div>
                 </form>
             </div>
@@ -824,21 +827,7 @@
 
     <!-- Chatbot Script -->
     
-     <script>
-            window.embeddedChatbotConfig = {
-            chatbotId: "TE2yjdFfvUnSrrmyEq2yx",
-            domain: "www.chatbase.co"
-            }
-            </script>
-            <script
-            src="https://www.chatbase.co/embed.min.js"
-            chatbotId="TE2yjdFfvUnSrrmyEq2yx"
-            domain="www.chatbase.co" 
-            defer>
-    </script>
-                </script>
-
-    <script>
+       <script>
         // Sign up function
         function signUp() {
             var email = document.getElementById("signup-email").value;
