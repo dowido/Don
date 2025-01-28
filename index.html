@@ -114,7 +114,7 @@
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     // Redirect to budget.html upon successful login
-                    window.location.href = 'Budget.html';
+                    window.location.href = 'dashboard.html';
                 })
                 .catch((error) => {
                     var errorCode = error.code;
@@ -689,8 +689,7 @@
             </div>
         </section>
 
-        <!-- Chatbot Section -->
-                            <!-- Answers will be dynamically inserted here -->
+  
                         </div>
                     </div>
                 </div>
@@ -716,7 +715,7 @@
             <!-- Log In Form -->
             <div class="auth-form" id="login">
                 <h2>Log In</h2>
-                <form id="login-form">
+                <form onsubmit="event.preventDefault(); login();">
                     <div class="form-group">
                         <label for="login-email">Email</label>
                         <input type="email" id="login-email" class="form-control" placeholder="Enter your email" required>
@@ -725,12 +724,9 @@
                         <label for="login-password">Password</label>
                         <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required>
                     </div>
-                    <button type="submit" class="btn btn-success">Log In <a href="Budget.html"></a></button>
+                    <button type="submit" class="btn btn-success">Log In <a href="dashboard.html"></a></button>
                     <div class="text-center">
-                       
-                    </div>
-                    <div id="login-success" class="alert alert-success mt-3" style="display: none;">
-                        Login successful! Redirecting to <a href="dashboard.html">dashboard</a>...
+                      
                     </div>
                 </form>
             </div>
@@ -826,8 +822,9 @@
         <script src="assets/js/custom.js"></script>
 
     <!-- Chatbot Script -->
-    
-       <script>
+
+
+    <script>
         // Sign up function
         function signUp() {
             var email = document.getElementById("signup-email").value;
@@ -860,6 +857,80 @@
                     var errorMessage = error.message;
                     console.error("Error logging in:", errorCode, errorMessage);
                 });}
+    </script>
+
+    <!-- Floating Action Button -->
+    <div class="fab" onclick="toggleChatbot()">💬</div>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container" id="chatbot-container">
+        <div class="chatbot-header">
+            <span>AI Chatbot</span>
+            <button onclick="toggleChatbot()">✖</button>
+        </div>
+        <div class="chatbot-messages" id="chatbot-messages"></div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbot-question" placeholder="Ask a question...">
+            <button onclick="askQuestion()">Send</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyAhmwL-einZeeQzistwL1UfzFIvRvvuAI0",
+            authDomain: "m-and-a-tool.firebaseapp.com",
+            projectId: "m-and-a-tool",
+            storageBucket: "m-and-a-tool.appspot.com",
+            messagingSenderId: "865033014110",
+            appId: "1:865033014110:web:49435d6cd66afd60b19dcf",
+            measurementId: "G-P2N41DQ5R1"
+        };
+        // Initialize Firebase if it hasn't been initialized already
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        var storage = firebase.storage();
+
+        // Toggle Chatbot
+        function toggleChatbot() {
+            var chatbotContainer = document.getElementById('chatbot-container');
+            if (chatbotContainer.style.display === 'none' || chatbotContainer.style.display === '') {
+                chatbotContainer.style.display = 'flex';
+            } else {
+                chatbotContainer.style.display = 'none';
+            }
+        }
+
+        // Ask Question
+        function askQuestion() {
+            var question = document.getElementById('chatbot-question').value;
+            if (question.trim() === '') return;
+
+            var messagesContainer = document.getElementById('chatbot-messages');
+            var userMessage = document.createElement('div');
+            userMessage.textContent = 'You: ' + question;
+            messagesContainer.appendChild(userMessage);
+
+            // Call OpenAI API (replace with your own API call)
+            axios.post('https://api.openai.com/v1/engines/davinci-codex/completions', {
+                prompt: question,
+                max_tokens: 150
+            }, {
+                headers: {
+                    'Authorization': 'Bearer YOUR_OPENAI_API_KEY'
+                }
+            }).then(function(response) {
+                var aiMessage = document.createElement('div');
+                aiMessage.textContent = 'AI: ' + response.data.choices[0].text.trim();
+                messagesContainer.appendChild(aiMessage);
+            }).catch(function(error) {
+                console.error('Error:', error);
+            });
+
+            document.getElementById('chatbot-question').value = '';
+        }
     </script>
 
 </body>

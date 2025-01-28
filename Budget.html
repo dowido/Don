@@ -95,23 +95,59 @@
     </script>
 
     <style>
-        table {
+        body {
+            font-family: Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .table-container {
+            margin: 50px auto;
+            max-width: 800px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .table-container h2 {
+            text-align: center;
+            color: #008751; /* Darker green similar to the Nigerian flag */
+            margin-bottom: 20px;
+        }
+
+        .table {
             width: 100%;
-            margin: 20px 0;
+            margin-bottom: 20px;
             border-collapse: collapse;
+            margin: 0 auto;
         }
 
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-
-        th, td {
+        .table th, .table td {
             padding: 12px;
-            text-align: left;
+            border: 1px solid #ddd;
+            text-align: center;
         }
 
-        th {
-            background-color: #f2f2f2;
+        .table th {
+            background-color: #008751;
+            color: white;
+        }
+
+        .table td a {
+            color: #008751;
+            text-decoration: none;
+        }
+
+        .table td a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -275,31 +311,29 @@
                 </tbody>
             </table>
             <!-- Button to navigate to upload.html -->
-            <div class="text-center mt-4">
-                <a href="upload.html" class="btn btn-primary">Upload New Document</a>
-            </div>
-        </div>
-    </section>
+         
 
     <!-- Project GIS Table -->
    
 
     <!-- Table to Display Climate Funds Percentage -->
-    <h2>Climate Funds Usage</h2>
-    <table id="climate-funds-table">
-        <thead>
-            <tr>
-                <th>Category</th>
-                <th>Percentage</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Climate-Related Funds</td>
-                <td id="climate-funds-percentage">Loading...</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-container">
+        <h2>Climate Funds Usage</h2>
+        <table id="climate-funds-table" class="table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Climate-Related Funds</td>
+                    <td id="climate-funds-percentage">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <!-- Uploaded Budget Documents Table -->
 
