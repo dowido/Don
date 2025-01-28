@@ -12,7 +12,7 @@
 		<link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
         
         <!-- title of site -->
-        <title>Dashboard - AGNES Nigeria Parliament</title>
+        <title>Budget - AGNES Nigeria Parliament</title>
 
         <!-- For favicon png -->
 		<link rel="shortcut icon" type="image/icon" href="assets/logo/favicon.jpg"/>
@@ -61,6 +61,26 @@
                 padding: 0;
             }
 
+            .navbar {
+                background-color: white;
+                border: none;
+            }
+
+            .navbar-brand, .navbar-nav li a {
+                color: #008751 !important;
+            }
+
+            .navbar-nav li a:hover {
+                background-color: #f4f4f4 !important;
+            }
+
+            .event {
+                background: #ffeb3b;
+                margin-top: 5px;
+                padding: 2px;
+                border-radius: 3px;
+            }
+
             /* FAB styles */
             .fab {
                 position: fixed;
@@ -77,6 +97,7 @@
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
                 cursor: pointer;
                 font-size: 24px;
+                z-index: 1000;
             }
 
             /* Chatbot container styles */
@@ -192,7 +213,7 @@
 		<section class="top-area">
 			<div class="header-area">
 				<!-- Start Navigation -->
-				<nav class="navbar navbar-default bootsnav navbar-sticky navbar-scrollspy" data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
+				<nav class="navbar navbar-default navbar-fixed-top">
 					<div class="container">
 						<!-- Start Header Navigation -->
 						<div class="navbar-header">
@@ -208,9 +229,8 @@
 							<ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
 								<li class=" scroll"><a href="dashboard.html">home</a></li>
 								<li><a href="policy.html">Policies</a></li>
-								<li><a href="Budget.html">Budget</a></li>
-								<li><a href="Legislation.html">Legislations</a></li>
-<!-- 								<li><a href="Pronouncement.html">From Govt</a></li> -->
+								 <li class="scroll"><a href="Budget.html">Budget</a></li>
+								<li class="scroll"><a href="calendar.html">Calendar</a></li>
 								<li><a href="pages/table-08/index.html">GIS</a></li>
 								<!-- <li class="scroll"><a href="#contact">Login</a></li> -->
 							</ul><!--/.nav -->
@@ -224,12 +244,12 @@
 		<!-- top-area End -->
 
 		<!--welcome-hero start -->
-		<section id="home" class="dash-hero">
+		<section id="home" class="dash-hero-page">
 			<div class="container">
 				<div class="welcome-hero-txt">
-					<h2>Hello Member of Parliament<br> Welcome! </h2>
+					<h2>Budget Allocations for Climate Change</h2>
 					<p>
-						This tool is designed to track and evaluate government accountability. The platform provides key insights into parliamentary decisions, budget tracking, policy progress, and legislation. 
+						Track budget allocations across sectors, including dedicated funds for climate change initiatives.
 					</p>
 				</div>
 				<!-- <div class="welcome-hero-serch-box">
@@ -485,6 +505,44 @@
         </div>
     </section>
 <!--CALENDAR--!>
+<!-- Budget Documents Table -->
+<section id="budget-documents" class="budget-documents">
+    <div class="container">
+        <h2>Budget Documents by Sector</h2>
+        <p>Select the number of rows to display and view downloadable budget documents with details on climate change funding.</p>
+        <table id="budgetTable" class="display">
+            <thead>
+                <tr>
+                    <th>Sector</th>
+                    <th>Document</th>
+                    <th>Last Updated</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Energy</td>
+                    <td>Energy Sector Budget 2024</td>
+                    <td>2024-09-12</td>
+                    <td><a href="docs/11038" download>Download PDF</a></td>
+                </tr>
+                <tr>
+                    <td>Transport</td>
+                    <td>Transport Sector Budget 2024</td>
+                    <td>2024-08-25</td>
+                    <td><a href="docs/11039.pdf" download>Download PDF</a></td>
+                </tr>
+                <tr>
+                    <td>Agriculture</td>
+                    <td>Agriculture Sector Budget 2024</td>
+                    <td>2024-07-15</td>
+                    <td><a href="docs/11040.pdf" download>Download PDF</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
 <!-- Floating Action Button -->
 <div class="fab" onclick="toggleChatbot()">💬</div>
 
