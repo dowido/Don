@@ -100,34 +100,29 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
         }
 
-        .table-container {
-            margin: 50px auto;
-            max-width: 800px;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+       
+
+        .budget-documents {
+            padding: 50px 0;
         }
 
-        .table-container h2 {
+        .budget-documents h2 {
             text-align: center;
-            color: #008751; /* Darker green similar to the Nigerian flag */
+            color: #008751;
             margin-bottom: 20px;
+        }
+
+        .budget-documents p {
+            text-align: center;
+            margin-bottom: 40px;
         }
 
         .table {
             width: 100%;
             margin-bottom: 20px;
             border-collapse: collapse;
-            margin: 0 auto;
         }
 
         .table th, .table td {
@@ -153,40 +148,45 @@
 </head>
 
 <body>
-    <!--header section-->
-    <section class="top-area">
+       <!-- top-area Start -->
+       <section class="top-area">
         <div class="header-area">
             <!-- Start Navigation -->
-            <nav class="navbar navbar-default bootsnav navbar-sticky navbar-scrollspy" data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
+            <nav class="navbar navbar-default bootsnav  navbar-sticky navbar-scrollspy"  data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
+
                 <div class="container">
+
                     <!-- Start Header Navigation -->
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
                             <i class="fa fa-bars"></i>
                         </button>
-                        <a class="navbar-brand" href="index.html">AGNES Nigeria Parliament</a>
-                    </div>
+                        <a class="navbar-brand" href="index.html">FEDERAL REPUBLIC OF NIGERIA <span> NATIONAL ASSEMBLY</span></a>
+
+                    </div><!--/.navbar-header-->
                     <!-- End Header Navigation -->
 
-                    <!-- Collect the nav links -->
+                    <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
                         <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+                            <!-- <li class=" scroll active"><a href="#home">home</a></li> -->
                             <li class=" scroll"><a href="dashboard.html">home</a></li>
                             <li><a href="policy.html">Policies</a></li>
-                            <li class="scroll"><a href="Budget.html">Budget</a></li>
-                            <li class="scroll"><a href="Legislation.html">Legislations</a></li>
+                            <li class="scroll"><a href="Legislation.html">legislation</a></li>
+                            <li class="scroll"><a href="calendar.html">calendar</a></li>
                             <li class="scroll"><a href="pages/table-08/index.html">GIS</a></li>
                         </ul><!--/.nav -->
-                    </div>
-                </div>
-            </nav>
+                    </div><!-- /.navbar-collapse -->
+                </div><!--/.container-->
+            </nav><!--/nav-->
             <!-- End Navigation -->
-        </div>
+        </div><!--/.header-area-->
         <div class="clearfix"></div>
-    </section>
-    <!--header end-->
 
-    <!--welcome hero-->
+    </section><!-- /.top-area-->
+    <!-- top-area End -->
+
+    <!-- Welcome Hero -->
     <section id="home" class="dash-hero-page">
         <div class="container">
             <div class="welcome-hero-txt">
@@ -196,6 +196,7 @@
         </div>
     </section>
     <br><br>
+
     <!-- Budget Documents Table -->
     <section id="budget-documents" class="budget-documents">
         <div class="container">
@@ -349,11 +350,11 @@
                     </div>
                     <div class="col-sm-9">
                         <ul class="footer-menu-item">
-                            <li class="scroll"><a href="#works">About the Tool</a></li>
-                            <li class="scroll"><a href="#explore">Content</a></li>
-                            <li class="scroll"><a href="#reviews">reviews</a></li>
-                            <li class="scroll"><a href="#blog">News</a></li>
-                           
+                            <li class=" scroll"><a href="dashboard.html">home</a></li>
+                            <li><a href="policy.html">Policies</a></li>
+                            <li class="scroll"><a href="Budget.html">Budget</a></li>
+                            <li class="scroll"><a href="calendar.html">calendar</a></li>
+                            <li class="scroll"><a href="pages/table-08/index.html">GIS</a></li>
                             <li class="scroll"><a href="#contact">my account</a></li>
                         </ul>
                     </div>
@@ -481,23 +482,6 @@
         // Call the function to fetch and display climate funds percentage
         fetchClimateFundsPercentage();
     </script>
-
-    <!-- Chatbase Embed Script -->
-    <script>
-        window.embeddedChatbotConfig = {
-            chatbotId: "TE2yjdFfvUnSrrmyEq2yx",
-            domain: "www.chatbase.co"
-        }
-    </script>
-    <script
-        src="https://www.chatbase.co/embed.min.js"
-        chatbotId="TE2yjdFfvUnSrrmyEq2yx"
-        domain="www.chatbase.co"
-        defer>
-    </script>
-
-    <!-- Include your JS files -->
-    <script src="assets/js/scripts.js"></script>
 
 </body>
 </html>
