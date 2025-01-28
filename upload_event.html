@@ -159,13 +159,17 @@
             var eventDate = document.getElementById('event-date').value;
             var eventTime = document.getElementById('event-time').value;
 
+            // Clear form fields immediately
+            document.getElementById('event-name').value = '';
+            document.getElementById('event-date').value = '';
+            document.getElementById('event-time').value = '';
+
             db.collection('events').add({
                 name: eventName,
                 date: eventDate,
                 time: eventTime
             }).then(() => {
                 console.log('Event added successfully');
-                document.getElementById('upload-event-form').reset();
                 loadEvents();
             }).catch((error) => {
                 console.error('Error adding event:', error);

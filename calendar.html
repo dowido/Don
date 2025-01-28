@@ -78,6 +78,36 @@
             padding: 2px;
             border-radius: 3px;
         }
+
+        .events-table-container {
+            margin: 20px auto;
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .events-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .events-table th,
+        .events-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .events-table th {
+            background-color: #008751;
+            color: white;
+        }
+
+        .events-table tr:hover {
+            background-color: #f5f5f5;
+        }
     </style>
 </head>
 <body>
@@ -92,6 +122,21 @@
 
     <div class="calendar" id="calendar-days">
         <!-- Calendar days will be dynamically inserted here -->
+    </div>
+
+    <div class="events-table-container">
+        <table class="events-table">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody id="events-table-body">
+                <!-- Events will be dynamically inserted here -->
+            </tbody>
+        </table>
     </div>
 
     <!-- Firebase SDKs -->

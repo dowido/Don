@@ -6,53 +6,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - AGNES Nigeria Parliament</title>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <style>
-        body {
-            font-family: Verdana, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .signup-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .auth-form {
             max-width: 400px;
-            width: 100%;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background-color: #fff;
         }
 
-        .signup-container h2 {
-            text-align: center;
-            color: #008751; /* Darker green similar to the Nigerian flag */
+        .auth-form h2 {
             margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
         }
 
-        .form-group label {
-            color: #008751;
+        .auth-form .form-group {
+            margin-bottom: 15px;
         }
 
-        .btn-primary {
-            background-color: #008751;
-            border-color: #008751;
+        .auth-form .form-control {
+            height: 45px;
+            border-radius: 5px;
         }
 
-        .btn-primary:hover {
-            background-color: #006b3f;
-            border-color: #006b3f;
+        .auth-form .btn {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
         }
 
-        .text-center a {
-            color: #008751;
+        .auth-form .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
         }
 
-        .alert-success a {
-            color: #006b3f;
+        .auth-form .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        .auth-form .text-center {
+            margin-top: 20px;
         }
     </style>
 
@@ -63,12 +62,12 @@
         // Your web app's Firebase configuration
         var firebaseConfig = {
             apiKey: "AIzaSyAhmwL-einZeeQzistwL1UfzFIvRvvuAI0",
-  authDomain: "m-and-a-tool.firebaseapp.com",
-  projectId: "m-and-a-tool",
-  storageBucket: "m-and-a-tool.appspot.com",
-  messagingSenderId: "865033014110",
-  appId: "1:865033014110:web:49435d6cd66afd60b19dcf",
-  measurementId: "G-P2N41DQ5R1"
+            authDomain: "m-and-a-tool.firebaseapp.com",
+            projectId: "m-and-a-tool",
+            storageBucket: "m-and-a-tool.firebasestorage.app",
+            messagingSenderId: "865033014110",
+            appId: "1:865033014110:web:49435d6cd66afd60b19dcf",
+            measurementId: "G-P2N41DQ5R1"
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -76,24 +75,20 @@
 </head>
 
 <body>
-    <div class="signup-container">
+    <div class="auth-form">
         <h2>Sign Up</h2>
-        <form id="signup-form">
+        <form onsubmit="signUp(); return false;">
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" class="form-control" required>
+                <label for="signup-email">Email</label>
+                <input type="email" id="signup-email" class="form-control" placeholder="Enter your email" required>
             </div>
             <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" class="form-control" required>
+                <label for="signup-password">Password</label>
+                <input type="password" id="signup-password" class="form-control" placeholder="Enter your password" required>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+            <button type="submit" class="btn btn-success">Sign Up</button>
             <div class="text-center">
-                <p>Already have an account? <a href="index.html#login">Log In</a></p>
+                                                        
             </div>
             <div id="signup-success" class="alert alert-success mt-3" style="display: none;">
                 Signup successful! You can now <a href="index.html#login">log in</a>.
@@ -104,34 +99,25 @@
     <!-- Include your JS files -->
     <script src="assets/js/scripts.js"></script>
     <script>
-        // Handle sign up
-        document.getElementById('signup-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            var username = document.getElementById('username').value;
-            var email = document.getElementById('email').value;
-            var password = document.getElementById('password').value;
-
+        // Sign up function
+        function signUp() {
+            var email = document.getElementById("signup-email").value;
+            var password = document.getElementById("signup-password").value;
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
+                    // Signed up
                     var user = userCredential.user;
-                    return user.updateProfile({
-                        displayName: username
-                    });
-                })
-                .then(() => {
-                    var user = firebase.auth().currentUser;
-                    return db.collection('users').doc(user.uid).set({
-                        username: username,
-                        email: email
-                    });
-                })
-                .then(() => {
+                    console.log("User signed up:", user);
                     document.getElementById('signup-success').style.display = 'block';
+                    document.getElementById('signup-email').value = '';
+                    document.getElementById('signup-password').value = '';
                 })
                 .catch((error) => {
-                    console.error('Error signing up:', error);
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.error("Error signing up:", errorCode, errorMessage);
                 });
-        });
+        }
     </script>
 </body>
 
