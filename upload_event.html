@@ -15,6 +15,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            flex-direction: column;
         }
 
         .upload-container {
@@ -24,6 +25,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 400px;
             width: 100%;
+            margin-bottom: 20px;
         }
 
         .upload-container h2 {
@@ -43,22 +45,62 @@
 
         .btn-primary:hover {
             background-color: #006b3f;
-            border-color: #006b3f;
         }
 
-        .text-center a {
+        .events-table {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .events-table h2 {
+            text-align: center;
             color: #008751;
+            margin-bottom: 20px;
         }
 
-        .alert-success a {
-            color: #006b3f;
+        .table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .table th {
+            background-color: #008751;
+            color: white;
+        }
+
+        .table td button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .table td button:hover {
+            background-color: #ff1a1a;
         }
     </style>
 </head>
 <body>
     <div class="upload-container">
-        <h2>Upload Calendar Event</h2>
+        <h2>Upload Event</h2>
         <form id="upload-event-form">
+            <div class="form-group">
+                <label for="event-name">Event Name</label>
+                <input type="text" id="event-name" class="form-control" placeholder="Enter event name" required>
+            </div>
             <div class="form-group">
                 <label for="event-date">Event Date</label>
                 <input type="date" id="event-date" class="form-control" required>
@@ -67,19 +109,31 @@
                 <label for="event-time">Event Time</label>
                 <input type="time" id="event-time" class="form-control" required>
             </div>
-            <div class="form-group">
-                <label for="event-description">Event Description</label>
-                <input type="text" id="event-description" placeholder="Event Description" class="form-control" required>
-            </div>
             <button type="submit" class="btn btn-primary btn-block">Upload Event</button>
-            <div id="upload-event-success" class="alert alert-success mt-3" style="display: none;">
-                Event uploaded successfully!
-            </div>
         </form>
     </div>
 
+    <div class="events-table">
+        <h2>All Events</h2>
+        <table class="table" id="events-table">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Events will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+
     <!-- Include your JS files -->
-    <script src="assets/js/scripts.js"></script>
+    <script src="assets/js/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
@@ -101,21 +155,59 @@
         // Handle event upload
         document.getElementById('upload-event-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            var date = document.getElementById('event-date').value;
-            var time = document.getElementById('event-time').value;
-            var description = document.getElementById('event-description').value;
+            var eventName = document.getElementById('event-name').value;
+            var eventDate = document.getElementById('event-date').value;
+            var eventTime = document.getElementById('event-time').value;
 
             db.collection('events').add({
-                date: date,
-                time: time,
-                description: description,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(function () {
-                document.getElementById('upload-event-success').style.display = 'block';
-            }).catch(function (error) {
-                console.error('Error uploading event:', error);
+                name: eventName,
+                date: eventDate,
+                time: eventTime
+            }).then(() => {
+                console.log('Event added successfully');
+                document.getElementById('upload-event-form').reset();
+                loadEvents();
+            }).catch((error) => {
+                console.error('Error adding event:', error);
             });
         });
+
+        // Load events
+        function loadEvents() {
+            db.collection('events').get().then((querySnapshot) => {
+                var eventsTableBody = document.getElementById('events-table').getElementsByTagName('tbody')[0];
+                eventsTableBody.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    var event = doc.data();
+                    var row = eventsTableBody.insertRow();
+                    row.insertCell(0).textContent = event.name;
+                    row.insertCell(1).textContent = event.date;
+                    row.insertCell(2).textContent = event.time;
+                    var deleteCell = row.insertCell(3);
+                    var deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.onclick = function () {
+                        deleteEvent(doc.id);
+                    };
+                    deleteCell.appendChild(deleteButton);
+                });
+            }).catch((error) => {
+                console.error('Error loading events:', error);
+            });
+        }
+
+        // Delete event
+        function deleteEvent(eventId) {
+            db.collection('events').doc(eventId).delete().then(() => {
+                console.log('Event deleted successfully');
+                loadEvents();
+            }).catch((error) => {
+                console.error('Error deleting event:', error);
+            });
+        }
+
+        // Load events on page load
+        window.onload = loadEvents;
     </script>
 </body>
 </html>
