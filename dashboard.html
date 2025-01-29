@@ -365,146 +365,212 @@
             background-color: #f2f2f2;
         }
     </style>
-<!-- Legislative Calendar Table -->
-    <section id="legislative-calendar" class="legislative-calendar">
-        <div class="container">
-            <h2>Legislative Calendar</h2>
-            <table id="calendarTable" class="display">
+
+<style>
+    /* Calendar CSS */
+    .month {
+        padding: 20px;
+        width: 100%;
+        background: #008751;
+        text-align: center;
+        color: white;
+    }
+
+    .month ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    .month ul li {
+        font-size: 20px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+    }
+
+    .month .prev, .month .next {
+        cursor: pointer;
+        float: left;
+        padding-top: 10px;
+        color: white;
+        font-size: 20px;
+    }
+
+    .month .next {
+        float: right;
+    }
+
+    .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
+        padding: 10px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin: 20px auto;
+        max-width: 800px;
+    }
+
+    .calendar .day {
+        text-align: center;
+        padding: 10px;
+        background: #ddd;
+        border-radius: 5px;
+    }
+
+    .calendar .day-header {
+        background: #008751;
+        color: white;
+        font-weight: bold;
+        border-radius: 5px;
+    }
+
+    .calendar .today {
+        background: #ffeb3b;
+    }
+</style>
+
+<!-- Add Calendar Section Before Budget Documents -->
+<section id="calendar-section">
+    <div class="container">
+        <h2>Event Calendar</h2>
+        <div class="month">
+            <ul>
+                <li class="prev" onclick="changeMonth(-1)">&#10094;</li>
+                <li class="next" onclick="changeMonth(1)">&#10095;</li>
+                <li id="month-year"></li>
+            </ul>
+        </div>
+
+        <div class="calendar" id="calendar-days">
+            <!-- Calendar days will be dynamically inserted here -->
+        </div>
+
+        <div class="events-table-container">
+            <table class="events-table">
                 <thead>
                     <tr>
+                        <th>Event Name</th>
                         <th>Date</th>
-                        <th>Session</th>
-                        <th>Key Agenda</th>
-                        <th>Download Agenda</th>
+                        <th>Time</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>2024-10-25</td>
-                        <td>National Assembly Plenary</td>
-                        <td>Debate on Climate Change Bills</td>
-                        <td><a href="docs/climate_change_bills_agenda.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-02</td>
-                        <td>Special Committee Session</td>
-                        <td>Budget Review for Health Sector</td>
-                        <td><a href="docs/health_budget_agenda.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-15</td>
-                        <td>Parliamentary Hearing</td>
-                        <td>Public Hearing on Renewable Energy Policy</td>
-                        <td><a href="docs/renewable_energy_hearing.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-12-05</td>
-                        <td>Legislative Workshop</td>
-                        <td>Capacity Building for Climate Action</td>
-                        <td><a href="docs/climate_action_workshop.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-10-25</td>
-                        <td>National Assembly Plenary</td>
-                        <td>Debate on Climate Change Bills</td>
-                        <td><a href="docs/climate_change_bills_agenda.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-02</td>
-                        <td>Special Committee Session</td>
-                        <td>Budget Review for Health Sector</td>
-                        <td><a href="docs/health_budget_agenda.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-15</td>
-                        <td>Parliamentary Hearing</td>
-                        <td>Public Hearing on Renewable Energy Policy</td>
-                        <td><a href="docs/renewable_energy_hearing.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-12-05</td>
-                        <td>Legislative Workshop</td>
-                        <td>Capacity Building for Climate Action</td>
-                        <td><a href="docs/climate_action_workshop.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-10-25</td>
-                        <td>National Assembly Plenary</td>
-                        <td>Debate on Climate Change Bills</td>
-                        <td><a href="docs/climate_change_bills_agenda.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-02</td>
-                        <td>Special Committee Session</td>
-                        <td>Budget Review for Health Sector</td>
-                        <td><a href="docs/health_budget_agenda.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-15</td>
-                        <td>Parliamentary Hearing</td>
-                        <td>Public Hearing on Renewable Energy Policy</td>
-                        <td><a href="docs/renewable_energy_hearing.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-12-05</td>
-                        <td>Legislative Workshop</td>
-                        <td>Capacity Building for Climate Action</td>
-                        <td><a href="docs/climate_action_workshop.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-10-25</td>
-                        <td>National Assembly Plenary</td>
-                        <td>Debate on Climate Change Bills</td>
-                        <td><a href="docs/climate_change_bills_agenda.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-02</td>
-                        <td>Special Committee Session</td>
-                        <td>Budget Review for Health Sector</td>
-                        <td><a href="docs/health_budget_agenda.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-15</td>
-                        <td>Parliamentary Hearing</td>
-                        <td>Public Hearing on Renewable Energy Policy</td>
-                        <td><a href="docs/renewable_energy_hearing.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-12-05</td>
-                        <td>Legislative Workshop</td>
-                        <td>Capacity Building for Climate Action</td>
-                        <td><a href="docs/climate_action_workshop.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-10-25</td>
-                        <td>National Assembly Plenary</td>
-                        <td>Debate on Climate Change Bills</td>
-                        <td><a href="docs/climate_change_bills_agenda.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-02</td>
-                        <td>Special Committee Session</td>
-                        <td>Budget Review for Health Sector</td>
-                        <td><a href="docs/health_budget_agenda.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-11-15</td>
-                        <td>Parliamentary Hearing</td>
-                        <td>Public Hearing on Renewable Energy Policy</td>
-                        <td><a href="docs/renewable_energy_hearing.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <tr>
-                        <td>2024-12-05</td>
-                        <td>Legislative Workshop</td>
-                        <td>Capacity Building for Climate Action</td>
-                        <td><a href="docs/climate_action_workshop.pdf" download>Download PDF</a></td>
-                    </tr>
-                    <!-- More rows can be added -->
+                <tbody id="events-table-body">
+                    <!-- Events will be dynamically inserted here -->
                 </tbody>
             </table>
         </div>
-    </section>
-<!--CALENDAR--!>
+    </div>
+</section>
+
+<script>
+    // Calendar JavaScript
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    let currentDate = new Date();
+
+    function renderCalendar(date) {
+        const monthYear = document.getElementById('month-year');
+        const calendarDays = document.getElementById('calendar-days');
+        calendarDays.innerHTML = '';
+
+        const year = date.getFullYear();
+        const month = date.getMonth();
+
+        monthYear.textContent = `${monthNames[month]} ${year}`;
+
+        // Add day headers
+        dayNames.forEach(day => {
+            const dayHeader = document.createElement('div');
+            dayHeader.classList.add('day', 'day-header');
+            dayHeader.textContent = day;
+            calendarDays.appendChild(dayHeader);
+        });
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Add empty cells
+        for (let i = 0; i < firstDay; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.classList.add('day');
+            calendarDays.appendChild(emptyCell);
+        }
+
+        // Fetch events from Firebase
+        db.collection('events').get().then((querySnapshot) => {
+            const events = {};
+            
+            // Group events by date
+            querySnapshot.forEach((doc) => {
+                const event = doc.data();
+                if (!events[event.date]) {
+                    events[event.date] = [];
+                }
+                events[event.date].push({
+                    name: event.name,
+                    time: event.time
+                });
+            });
+
+            // Add days and their events
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayCell = document.createElement('div');
+                dayCell.classList.add('day');
+                dayCell.textContent = i;
+
+                // Check for events on this day
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                if (events[dateStr]) {
+                    const eventsContainer = document.createElement('div');
+                    eventsContainer.className = 'day-events';
+                    
+                    events[dateStr].forEach(event => {
+                        const eventDiv = document.createElement('div');
+                        eventDiv.className = 'event-indicator';
+                        eventDiv.textContent = `${event.name} (${event.time})`;
+                        eventsContainer.appendChild(eventDiv);
+                    });
+                    
+                    dayCell.appendChild(eventsContainer);
+                }
+
+                calendarDays.appendChild(dayCell);
+            }
+
+            // Update events table
+            const tableBody = document.getElementById('events-table-body');
+            tableBody.innerHTML = '';
+            
+            Object.keys(events).sort().forEach(date => {
+                events[date].forEach(event => {
+                    const row = tableBody.insertRow();
+                    row.insertCell(0).textContent = event.name;
+                    row.insertCell(1).textContent = date;
+                    row.insertCell(2).textContent = event.time;
+                });
+            });
+        });
+    }
+
+    function changeMonth(delta) {
+        currentDate.setMonth(currentDate.getMonth() + delta);
+        renderCalendar(currentDate);
+    }
+
+    // Initialize calendar
+    renderCalendar(currentDate);
+</script>
+
+
+
+
+
+    
+
+
+
+
 <!-- Budget Documents Table -->
 <section id="budget-documents" class="budget-documents">
     <div class="container">
@@ -543,22 +609,69 @@
     </div>
 </section>
 
-<!-- Floating Action Button -->
-<div class="fab" onclick="toggleChatbot()">💬</div>
+ <!-- Floating Action Button -->
+ <div class="fab" onclick="toggleChatbot()">💬</div>
 
-<!-- Chatbot Container -->
-<div class="chatbot-container" id="chatbot-container">
-    <div class="chatbot-header">
-        <span>AI Chatbot</span>
-        <button onclick="toggleChatbot()">✖</button>
-    </div>
-    <div class="chatbot-messages" id="chatbot-messages"></div>
-    <div class="chatbot-input">
-        <input type="text" id="chatbot-question" placeholder="Ask a question...">
-        <button onclick="askQuestion()">Send</button>
-    </div>
-</div>
+ <!-- Chatbot Container -->
+ <div class="chatbot-container" id="chatbot-container">
+     <div class="chatbot-header">
+         <span>AI Chatbot</span>
+         <button onclick="toggleChatbot()">✖</button>
+     </div>
+     <div class="chatbot-messages" id="chatbot-messages"></div>
+     <div class="chatbot-input">
+         <input type="text" id="chatbot-question" placeholder="Ask a question...">
+         <button onclick="askQuestion()">Send</button>
+     </div>
+ </div>
 
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ <script>
+     // Toggle Chatbot
+     function toggleChatbot() {
+         var chatbotContainer = document.getElementById('chatbot-container');
+         if (chatbotContainer.style.display === 'none' || chatbotContainer.style.display === '') {
+             chatbotContainer.style.display = 'flex';
+         } else {
+             chatbotContainer.style.display = 'none';
+         }
+     }
+
+     // Ask Question
+     async function askQuestion() {
+         var input = document.getElementById('chatbot-question');
+         var question = input.value;
+         input.value = '';
+
+         var messagesContainer = document.getElementById('chatbot-messages');
+         var userMessage = document.createElement('div');
+         userMessage.textContent = 'You: ' + question;
+         messagesContainer.appendChild(userMessage);
+
+         // Call OpenAI API (replace with your own API call)
+         try {
+             var response = await fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
+                 method: 'POST',
+                 headers: {
+                     'Content-Type': 'application/json',
+                     'Authorization': 'Bearer YOUR_OPENAI_API_KEY'
+                 },
+                 body: JSON.stringify({
+                     prompt: question,
+                     max_tokens: 150
+                 })
+             });
+             var data = await response.json();
+             var aiMessage = document.createElement('div');
+             aiMessage.textContent = 'AI: ' + data.choices[0].text.trim();
+             messagesContainer.appendChild(aiMessage);
+         } catch (error) {
+             console.error('Error:', error);
+         }
+
+         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+     }
+ </script>
 <!--footer start-->
 <footer id="footer"  class="footer">
     <div class="container">
@@ -743,6 +856,63 @@
             chatBody.scrollTop = chatBody.scrollHeight;
         }
     }
+
+    // Add after Firebase initialization
+    const chatbotContainer = document.getElementById('chatbot-container');
+    const chatInput = document.getElementById('chatbot-input');
+    const sendButton = document.getElementById('send-button');
+    const messagesDiv = document.getElementById('chatbot-messages');
+
+    function toggleChatbot() {
+        if (chatbotContainer.style.display === 'none' || chatbotContainer.style.display === '') {
+            chatbotContainer.style.display = 'flex';
+        } else {
+            chatbotContainer.style.display = 'none';
+        }
+    }
+
+    async function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        // Add user message
+        addMessage('User', message);
+        chatInput.value = '';
+
+        try {
+            // Call OpenAI API (replace with your endpoint)
+            const response = await fetch('YOUR_API_ENDPOINT', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message })
+            });
+            
+            const data = await response.json();
+            addMessage('Bot', data.response);
+        } catch (error) {
+            console.error('Error:', error);
+            addMessage('Bot', 'Sorry, I encountered an error.');
+        }
+    }
+
+    function addMessage(sender, text) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender.toLowerCase()}`;
+        messageDiv.textContent = `${sender}: ${text}`;
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    // Add event listeners
+    document.querySelector('.fab').addEventListener('click', toggleChatbot);
+    sendButton.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
 </script>
 
 </body>
