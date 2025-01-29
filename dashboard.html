@@ -432,141 +432,212 @@
 
 <!-- Add Calendar Section Before Budget Documents -->
 <section id="calendar-section">
-    <div class="container">
-        <h2>Event Calendar</h2>
-        <div class="month">
-            <ul>
-                <li class="prev" onclick="changeMonth(-1)">&#10094;</li>
-                <li class="next" onclick="changeMonth(1)">&#10095;</li>
-                <li id="month-year"></li>
-            </ul>
+    <div class="calendar-container">
+        <div class="calendar-nav">
+            <button onclick="changeMonth(-1)">&lt;</button>
+            <h2 id="currentMonth"></h2>
+            <button onclick="changeMonth(1)">&gt;</button>
         </div>
-
-        <div class="calendar" id="calendar-days">
-            <!-- Calendar days will be dynamically inserted here -->
-        </div>
-
+        <div id="calendar" class="calendar"></div>
         <div class="events-table-container">
+            <h3>Upcoming Events</h3>
             <table class="events-table">
                 <thead>
                     <tr>
-                        <th>Event Name</th>
+                        <th>Event</th>
                         <th>Date</th>
                         <th>Time</th>
+                        <th>Description</th>
                     </tr>
                 </thead>
-                <tbody id="events-table-body">
-                    <!-- Events will be dynamically inserted here -->
-                </tbody>
+                <tbody id="events-table-body"></tbody>
             </table>
         </div>
     </div>
-</section>
 
-<script>
-    // Calendar JavaScript
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    let currentDate = new Date();
-
-    function renderCalendar(date) {
-        const monthYear = document.getElementById('month-year');
-        const calendarDays = document.getElementById('calendar-days');
-        calendarDays.innerHTML = '';
-
-        const year = date.getFullYear();
-        const month = date.getMonth();
-
-        monthYear.textContent = `${monthNames[month]} ${year}`;
-
-        // Add day headers
-        dayNames.forEach(day => {
-            const dayHeader = document.createElement('div');
-            dayHeader.classList.add('day', 'day-header');
-            dayHeader.textContent = day;
-            calendarDays.appendChild(dayHeader);
-        });
-
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-        // Add empty cells
-        for (let i = 0; i < firstDay; i++) {
-            const emptyCell = document.createElement('div');
-            emptyCell.classList.add('day');
-            calendarDays.appendChild(emptyCell);
+    <style>
+        .calendar-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        // Fetch events from Firebase
-        db.collection('events').get().then((querySnapshot) => {
-            const events = {};
-            
-            // Group events by date
-            querySnapshot.forEach((doc) => {
-                const event = doc.data();
-                if (!events[event.date]) {
-                    events[event.date] = [];
-                }
-                events[event.date].push({
-                    name: event.name,
-                    time: event.time
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #008751;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .calendar-nav button {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            padding: 10px;
+        }
+
+        .calendar-day {
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #eee;
+            position: relative;
+        }
+
+        .day-header {
+            background: #008751;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        .event {
+            background: #ffeb3b;
+            padding: 3px 6px;
+            margin: 2px 0;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .events-table-container {
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        .events-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .events-table th {
+            background: #008751;
+            color: white;
+            padding: 10px;
+        }
+
+        .events-table td {
+            padding: 10px;
+            border: 1px solid #eee;
+        }
+    </style>
+
+    <script>
+        const calendar = {
+            date: new Date(),
+            days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+
+            init() {
+                this.render();
+                this.loadEvents();
+            },
+
+            render() {
+                const calendarEl = document.getElementById('calendar');
+                calendarEl.innerHTML = '';
+                
+                // Add day headers
+                this.days.forEach(day => {
+                    const dayHeader = document.createElement('div');
+                    dayHeader.className = 'day-header';
+                    dayHeader.textContent = day;
+                    calendarEl.appendChild(dayHeader);
                 });
-            });
 
-            // Add days and their events
-            for (let i = 1; i <= daysInMonth; i++) {
-                const dayCell = document.createElement('div');
-                dayCell.classList.add('day');
-                dayCell.textContent = i;
+                const firstDay = new Date(this.date.getFullYear(), this.date.getMonth(), 1).getDay();
+                const daysInMonth = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0).getDate();
 
-                // Check for events on this day
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-                if (events[dateStr]) {
-                    const eventsContainer = document.createElement('div');
-                    eventsContainer.className = 'day-events';
-                    
-                    events[dateStr].forEach(event => {
-                        const eventDiv = document.createElement('div');
-                        eventDiv.className = 'event-indicator';
-                        eventDiv.textContent = `${event.name} (${event.time})`;
-                        eventsContainer.appendChild(eventDiv);
-                    });
-                    
-                    dayCell.appendChild(eventsContainer);
+                // Add empty cells
+                for (let i = 0; i < firstDay; i++) {
+                    const emptyDay = document.createElement('div');
+                    emptyDay.className = 'calendar-day';
+                    calendarEl.appendChild(emptyDay);
                 }
 
-                calendarDays.appendChild(dayCell);
+                // Add days
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const day = document.createElement('div');
+                    day.className = 'calendar-day';
+                    day.innerHTML = `<div class="day-number">${i}</div>`;
+                    day.setAttribute('data-date', 
+                        `${this.date.getFullYear()}-${String(this.date.getMonth() + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`);
+                    calendarEl.appendChild(day);
+                }
+
+                document.getElementById('currentMonth').textContent = 
+                    `${this.months[this.date.getMonth()]} ${this.date.getFullYear()}`;
+            },
+
+            loadEvents() {
+                const startDate = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
+                const endDate = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0);
+
+                db.collection('events')
+                    .where('date', '>=', startDate.toISOString().split('T')[0])
+                    .where('date', '<=', endDate.toISOString().split('T')[0])
+                    .get()
+                    .then(snapshot => {
+                        const tableBody = document.getElementById('events-table-body');
+                        tableBody.innerHTML = '';
+
+                        snapshot.forEach(doc => {
+                            const event = doc.data();
+                            
+                            // Add event to calendar
+                            const dayEl = document.querySelector(`[data-date="${event.date}"]`);
+                            if (dayEl) {
+                                const eventEl = document.createElement('div');
+                                eventEl.className = 'event';
+                                eventEl.textContent = `${event.name} (${event.time})`;
+                                dayEl.appendChild(eventEl);
+                            }
+
+                            // Add event to table
+                            const row = tableBody.insertRow();
+                            row.insertCell(0).textContent = event.name;
+                            row.insertCell(1).textContent = event.date;
+                            row.insertCell(2).textContent = event.time;
+                            row.insertCell(3).textContent = event.description || '';
+                        });
+                    })
+                    .catch(error => console.error('Error loading events:', error));
             }
+        };
 
-            // Update events table
-            const tableBody = document.getElementById('events-table-body');
-            tableBody.innerHTML = '';
-            
-            Object.keys(events).sort().forEach(date => {
-                events[date].forEach(event => {
-                    const row = tableBody.insertRow();
-                    row.insertCell(0).textContent = event.name;
-                    row.insertCell(1).textContent = date;
-                    row.insertCell(2).textContent = event.time;
-                });
-            });
-        });
-    }
+        function changeMonth(delta) {
+            calendar.date.setMonth(calendar.date.getMonth() + delta);
+            calendar.init();
+        }
 
-    function changeMonth(delta) {
-        currentDate.setMonth(currentDate.getMonth() + delta);
-        renderCalendar(currentDate);
-    }
-
-    // Initialize calendar
-    renderCalendar(currentDate);
-</script>
+        // Initialize calendar
+        document.addEventListener('DOMContentLoaded', () => calendar.init());
+    </script>
+</section>
 
 
 
 
 
-    
+
+
+
+
+
 
 
 
@@ -761,159 +832,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
 <script src="https://unpkg.com/compromise@13.11.0/builds/compromise.min.js"></script>
 
-<script>
-    // Your web app's Firebase configuration
-    var firebaseConfig = {
-        apiKey: "AIzaSyAhmwL-einZeeQzistwL1UfzFIvRvvuAI0",
-        authDomain: "m-and-a-tool.firebaseapp.com",
-        projectId: "m-and-a-tool",
-        storageBucket: "m-and-a-tool.appspot.com",
-        messagingSenderId: "865033014110",
-        appId: "1:865033014110:web:49435d6cd66afd60b19dcf",
-        measurementId: "G-P2N41DQ5R1"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    var db = firebase.firestore();
-    var storage = firebase.storage();
 
-    var selectedAI = 'pdf'; // Default to PDF Answering AI
-
-    // Toggle FAB options visibility
-    function toggleFabOptions() {
-        var fabOptions = document.getElementById('fab-options');
-        if (fabOptions.style.display === 'none' || fabOptions.style.display === '') {
-            fabOptions.style.display = 'flex';
-        } else {
-            fabOptions.style.display = 'none';
-        }
-    }
-
-    // Select AI type
-    function selectAI(type) {
-        selectedAI = type;
-        toggleFabOptions();
-        toggleChat();
-    }
-
-    // Toggle chat container visibility
-    function toggleChat() {
-        var chatContainer = document.getElementById('chat-container');
-        if (chatContainer.style.display === 'none' || chatContainer.style.display === '') {
-            chatContainer.style.display = 'flex';
-        } else {
-            chatContainer.style.display = 'none';
-        }
-    }
-
-    // Handle question submission
-    async function askQuestion() {
-        var input = document.getElementById('chat-input');
-        var question = input.value;
-        input.value = '';
-
-        var chatBody = document.getElementById('chat-body');
-        var userMessage = document.createElement('div');
-        userMessage.textContent = 'You: ' + question;
-        chatBody.appendChild(userMessage);
-
-        if (selectedAI === 'pdf') {
-            // PDF Answering AI
-            storage.ref('pdfs').listAll().then(function(result) {
-                result.items.forEach(function(pdfRef) {
-                    pdfRef.getDownloadURL().then(function(url) {
-                        fetch(url).then(function(response) {
-                            return response.text();
-                        }).then(function(text) {
-                            var doc = nlp(text);
-                            var match = doc.match(question);
-                            var botMessage = document.createElement('div');
-                            if (match.found) {
-                                botMessage.textContent = 'Bot: ' + match.out('text');
-                            } else {
-                                botMessage.textContent = 'Bot: No relevant information found.';
-                            }
-                            chatBody.appendChild(botMessage);
-                            chatBody.scrollTop = chatBody.scrollHeight;
-                        });
-                    });
-                });
-            });
-        } else if (selectedAI === 'generative') {
-            // Generative AI
-            var response = await fetch('YOUR_SERVERLESS_FUNCTION_URL', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ question: question })
-            });
-            var data = await response.json();
-
-            var botMessage = document.createElement('div');
-            botMessage.textContent = 'Bot: ' + data.answer;
-            chatBody.appendChild(botMessage);
-            chatBody.scrollTop = chatBody.scrollHeight;
-        }
-    }
-
-    // Add after Firebase initialization
-    const chatbotContainer = document.getElementById('chatbot-container');
-    const chatInput = document.getElementById('chatbot-input');
-    const sendButton = document.getElementById('send-button');
-    const messagesDiv = document.getElementById('chatbot-messages');
-
-    function toggleChatbot() {
-        if (chatbotContainer.style.display === 'none' || chatbotContainer.style.display === '') {
-            chatbotContainer.style.display = 'flex';
-        } else {
-            chatbotContainer.style.display = 'none';
-        }
-    }
-
-    async function sendMessage() {
-        const message = chatInput.value.trim();
-        if (!message) return;
-
-        // Add user message
-        addMessage('User', message);
-        chatInput.value = '';
-
-        try {
-            // Call OpenAI API (replace with your endpoint)
-            const response = await fetch('YOUR_API_ENDPOINT', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message })
-            });
-            
-            const data = await response.json();
-            addMessage('Bot', data.response);
-        } catch (error) {
-            console.error('Error:', error);
-            addMessage('Bot', 'Sorry, I encountered an error.');
-        }
-    }
-
-    function addMessage(sender, text) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${sender.toLowerCase()}`;
-        messageDiv.textContent = `${sender}: ${text}`;
-        messagesDiv.appendChild(messageDiv);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
-
-    // Add event listeners
-    document.querySelector('.fab').addEventListener('click', toggleChatbot);
-    sendButton.addEventListener('click', sendMessage);
-    chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
-    });
-</script>
 
 </body>
 
